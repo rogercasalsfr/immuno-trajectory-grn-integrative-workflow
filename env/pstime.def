@@ -1,0 +1,43 @@
+Bootstrap: docker
+From: condaforge/mambaforge:23.11.0-0
+
+%files
+    environment.yml /environment.yml
+
+%post
+    set -e
+
+    apt-get update && apt-get install -y \
+        git \
+        build-essential \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Fix environment file
+    sed -i '/^prefix:/d' /environment.yml
+    sed -i 's/name: =pstime/name: pstime_env/' /environment.yml
+    sed -i '/py-monocle/d' /environment.yml
+
+    # Create environment
+    mamba env create -f /environment.yml
+
+    # Activate environment
+    . /opt/conda/etc/profile.d/conda.sh
+    conda activate pstime_env
+
+    # Install py-monocle from GitHub
+    cd /opt
+    git clone https://github.com/bioturing/py-monocle.git
+    cd py-monocle
+    pip install .
+
+    # Clean conda cache
+    conda clean -afy
+
+
+%environment
+    export PATH=/opt/conda/envs/pstime_env/bin:$PATH
+    export CONDA_DEFAULT_ENV=pstime_env
+
+
+%runscript
+    exec "$@"
