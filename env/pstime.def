@@ -2,7 +2,7 @@ Bootstrap: docker
 From: condaforge/mambaforge:23.11.0-0
 
 %files
-    environment.yml /environment.yml
+    env/environment.yml /environment.yml
 
 %post
     set -e
