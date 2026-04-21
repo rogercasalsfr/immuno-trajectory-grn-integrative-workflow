@@ -30,6 +30,9 @@ From: condaforge/mambaforge:23.11.0-0
     cd py-monocle
     pip install .
 
+    # Fail the build early if the notebook stack is inconsistent.
+    python -c "import six, dateutil, jupyterlab, jupyter_client; print('pstime_env OK')"
+
     # Clean conda cache
     conda clean -afy
 

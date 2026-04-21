@@ -1,4 +1,4 @@
 1) traduir a l'anglès
 2) donar format e qualitat tipus https://apptainer.org/docs/user/latest/quick_start.html#installation
 3) considera que l'usuari és curt de gambals com jo i fes una implementació progressiva, amb passos clarament identicficats també en el nom dels fitxers
-
+4) no acabo de veure com usar apptainer per a executar. Veig que m'està usant el python que tinc al (base) de conda
