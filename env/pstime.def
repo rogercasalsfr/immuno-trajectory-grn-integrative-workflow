@@ -24,11 +24,12 @@ From: condaforge/mambaforge:23.11.0-0
     . /opt/conda/etc/profile.d/conda.sh
     conda activate pstime_env
 
-    # Install py-monocle from GitHub
+    # Install notebook dependencies that are not available in the exported env
     cd /opt
     git clone https://github.com/bioturing/py-monocle.git
     cd py-monocle
     pip install .
+    pip install --no-deps harmonypy==0.0.10
 
     # Clean conda cache
     conda clean -afy

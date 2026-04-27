@@ -1,88 +1,151 @@
 # Cancer pseudotime GRN workflow
 
-Aquest repositori recull el material del protocol de *pseudotime* i inferència de xarxes reguladores (GRN) a partir de dades de *single-cell RNA-seq*.
+This repository gives you one container recipe and one main notebook.
 
-## Estructura del repositori
+If you follow the steps below, you can reproduce the workflow in `scripts/final_protocol.ipynb` from the beginning through the cell immediately before `# Scenic pruning step`.
 
-- `env/pstime.def`: recepta de Singularity/Apptainer per construir la imatge `.sif`.
-- `env/environment.yml`: entorn conda exportat que s'utilitza com a base de la imatge.
-- `env/pstime.yml`: còpia de l'entorn original.
-- `scripts/pstime_protocol.ipynb`: tutorial principal del protocol.
-- `scripts/methods.ipynb`: notebook complementari amb mètodes.
-- `scripts/data/GSE123813/*`: dades d'exemple per executar el tutorial.
+## What to use
 
-## Requisits
+Use these files:
 
-- Linux amb [Apptainer](https://apptainer.org/) o [SingularityCE](https://sylabs.io/singularity/) instal·lat.
-- Espai en disc suficient (la construcció de la imatge pot ocupar diversos GB).
-- Recomanat: `--fakeroot` o permisos d'administrador per fer `build` local.
+- `env/pstime.def`: recipe used to build the image
+- `env/environment.yml`: conda environment specification used inside the image
+- `scripts/final_protocol.ipynb`: main notebook
+- `check_container.sh`: one-command validation script
 
-## Construcció de la imatge `.sif`
+The repository tracks the recipe, not the built container image. You build `pstime.sif` locally from `env/pstime.def`.
 
-La recepta ja està preparada per:
+## Before you start
 
-1. Instal·lar dependències del sistema (`git`, `build-essential`).
-2. Corregir l'`environment.yml` (neteja de `prefix`, canvi de nom de l'entorn).
-3. Crear l'entorn `pstime_env` amb `mamba`.
-4. Instal·lar `py-monocle` des de GitHub dins del contenidor.
+You need:
 
-### Opció A (recomanada): Apptainer
+- Linux or WSL
+- Apptainer installed
+- internet access for building the image and downloading the public GEO example files
+- enough disk space for the image build
 
-Des de l'arrel del repositori:
+## Step 1. Build the image locally
+
+From the repository root, run:
 
 ```bash
 apptainer build --fakeroot pstime.sif env/pstime.def
 ```
 
-Si tens permisos root:
+If your system does not support `--fakeroot`, run:
 
 ```bash
 sudo apptainer build pstime.sif env/pstime.def
 ```
 
-### Opció B: SingularityCE
+The resulting `pstime.sif` is a local build artifact and is ignored by Git.
+
+## Step 2. Check that the local image works
+
+Run:
 
 ```bash
-sudo singularity build pstime.sif env/pstime.def
+./check_container.sh
 ```
 
-## Com executar el tutorial
+This script checks:
 
-### 1) Llançar Jupyter Lab dins del contenidor
+- that Apptainer is available
+- that your local `pstime.sif` exists
+- that Python starts inside the container
+- that the notebook packages import correctly
+- that Jupyter Lab and `nbconvert` are available
+
+If you want to check a different image path, you can pass it as an argument:
 
 ```bash
-apptainer exec --bind "$PWD":/workspace pstime.sif \
-  bash -lc 'cd /workspace && jupyter lab --ip 0.0.0.0 --port 8888 --no-browser'
+./check_container.sh /path/to/pstime.sif
 ```
 
-- Obre al navegador la URL que mostri Jupyter (normalment `http://127.0.0.1:8888/...`).
-- Navega a `scripts/pstime_protocol.ipynb` per seguir el tutorial principal.
+## Step 3. Start Jupyter Lab
 
-> Si uses SingularityCE, substitueix `apptainer` per `singularity`.
-
-### 2) Execució no interactiva del notebook (opcional)
-
-Per validar que el tutorial corre de cap a peus:
+From the repository root, run:
 
 ```bash
-apptainer exec --bind "$PWD":/workspace pstime.sif \
-  bash -lc 'cd /workspace && jupyter nbconvert --to notebook --execute scripts/pstime_protocol.ipynb --output pstime_protocol.executed.ipynb'
+apptainer -q exec --bind "$PWD":/workspace pstime.sif \
+  python -m jupyter lab \
+  --no-browser \
+  --ip=0.0.0.0 \
+  --port=8888 \
+  --ServerApp.root_dir=/workspace
 ```
 
-## Verificació ràpida de la imatge
+Then open the URL shown by Jupyter in your browser.
 
-Per comprovar que l'entorn del contenidor és l'esperat:
+Inside Jupyter, open:
+
+- `scripts/final_protocol.ipynb`
+
+Important:
+
+- use `python -m jupyter ...` exactly as shown above
+- do not run `jupyter` through `bash -lc 'jupyter ...'`
+
+## Step 4. Run the reproducible part of the notebook
+
+The validated reproducible part of the notebook goes from the start of `scripts/final_protocol.ipynb` through the cell immediately before `# Scenic pruning step`.
+
+That section was executed successfully in the container on April 27, 2026 using a temporary copy of the notebook truncated just before the SCENIC pruning block.
+
+That part includes:
+
+1. downloading the public GEO example data
+2. reading metadata and counts
+3. building the `AnnData` object
+4. preprocessing
+5. Harmony integration
+6. clustering and pseudotime-related setup before the GRN pruning section
+
+## Example data used by the notebook
+
+The first notebook cells create a local data directory and download these public files:
+
+- `GSE123813_scc_metadata.txt.gz`
+- `GSE123813_scc_scRNA_counts.txt.gz`
+
+They are downloaded into:
+
+- `scripts/data/GSE123813/`
+
+So if the notebook asks for internet access during the first run, that is expected.
+
+## Quick smoke test without opening Jupyter
+
+If you only want to test the container manually, run:
 
 ```bash
-apptainer exec pstime.sif python -c "import scanpy, decoupler, sklearn; print('OK')"
+apptainer -q exec pstime.sif python - <<'PY'
+import scanpy, decoupler, pandas, numpy, pyslingshot, py_monocle, harmonypy
+import scipy.sparse
+import matplotlib.pyplot as plt
+print('container OK for final_protocol.ipynb up to Scenic pruning')
+PY
 ```
 
-## Notes importants
+## What was validated
 
-- La recepta `env/pstime.def` ja exporta el `PATH` perquè `pstime_env` sigui l'entorn per defecte dins la imatge.
-- Les dades d'exemple del directori `scripts/data/GSE123813/` es poden usar directament al notebook.
-- Si el `build` falla per permisos, prova amb `--fakeroot` o fes el `build` en una màquina/HPC on estigui habilitat.
+A fresh image built from `env/pstime.def` was validated on April 27, 2026.
 
-## Citació i context
+Validated successfully:
 
-Aquest repositori conté material de suport per al protocol de treball de *pseudotime* i GRN. Si l'utilitzes en entorns reproductibles (HPC, clústers, etc.), es recomana conservar la imatge `pstime.sif` com a artefacte versionat.
+- the image build
+- the conda environment `pstime_env`
+- all package names declared in `env/environment.yml`
+- the notebook import set needed up to `# Scenic pruning step`
+- `python -m jupyter lab --version`
+- `python -m nbconvert --version`
+- a non-interactive execution of the notebook up to the cell before `# Scenic pruning step`
+
+## Summary
+
+For this repository, the easy path is:
+
+1. build `pstime.sif`
+2. run `./check_container.sh`
+3. launch Jupyter Lab
+4. run `scripts/final_protocol.ipynb` up to the cell before `# Scenic pruning step`
