@@ -1,4 +1,4 @@
-# Cancer pseudotime GRN workflow
+# Immuno trajectory GRN integrative workflow
 
 This repository gives you one container recipe and one main notebook.
 
