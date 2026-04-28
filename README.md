@@ -2,7 +2,7 @@
 
 This repository gives you one container recipe and one main notebook.
 
-If you follow the steps below, you can reproduce the workflow in `scripts/final_protocol.ipynb` from the beginning through the cell immediately before `# Scenic pruning step`.
+If you follow the steps below, you can reproduce the workflow in `scripts/protocol.ipynb` from the beginning through the cell immediately before `# Scenic pruning step`.
 
 ## What to use
 
@@ -10,7 +10,7 @@ Use these files:
 
 - `env/pstime.def`: recipe used to build the image
 - `env/environment.yml`: conda environment specification used inside the image
-- `scripts/final_protocol.ipynb`: main notebook
+- `scripts/protocol.ipynb`: main notebook
 - `check_container.sh`: one-command validation script
 
 The repository tracks the recipe, not the built container image. You build `pstime.sif` locally from `env/pstime.def`.
@@ -79,7 +79,7 @@ Then open the URL shown by Jupyter in your browser.
 
 Inside Jupyter, open:
 
-- `scripts/final_protocol.ipynb`
+- `scripts/protocol.ipynb`
 
 Important:
 
@@ -88,7 +88,7 @@ Important:
 
 ## Step 4. Run the reproducible part of the notebook
 
-The validated reproducible part of the notebook goes from the start of `scripts/final_protocol.ipynb` through the cell immediately before `# Scenic pruning step`.
+The validated reproducible part of the notebook goes from the start of `scripts/protocol.ipynb` through the cell immediately before `# Scenic pruning step`.
 
 That section was executed successfully in the container on April 27, 2026 using a temporary copy of the notebook truncated just before the SCENIC pruning block.
 
@@ -123,7 +123,7 @@ apptainer -q exec pstime.sif python - <<'PY'
 import scanpy, decoupler, pandas, numpy, pyslingshot, py_monocle, harmonypy
 import scipy.sparse
 import matplotlib.pyplot as plt
-print('container OK for final_protocol.ipynb up to Scenic pruning')
+print('container OK for protocol.ipynb up to Scenic pruning')
 PY
 ```
 
@@ -148,4 +148,4 @@ For this repository, the easy path is:
 1. build `pstime.sif`
 2. run `./check_container.sh`
 3. launch Jupyter Lab
-4. run `scripts/final_protocol.ipynb` up to the cell before `# Scenic pruning step`
+4. run `scripts/protocol.ipynb` up to the cell before `# Scenic pruning step`
