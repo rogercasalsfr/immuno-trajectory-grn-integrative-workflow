@@ -2,7 +2,7 @@
 
 This repository gives you one container recipe and one main notebook.
 
-If you follow the steps below, you can reproduce the workflow in `workflow/protocol.ipynb` from the beginning through the cell immediately before `# Scenic pruning step`.
+If you follow the steps below, you can reproduce the workflow in `workflow/protocol.ipynb` from the beginning through the final, taking into account that scenic inference step should be previously ran in your computer.
 
 ## What to use
 
@@ -86,11 +86,11 @@ Important:
 - use `python -m jupyter ...` exactly as shown above
 - do not run `jupyter` through `bash -lc 'jupyter ...'`
 
-## Step 4. Run the reproducible part of the notebook
+## Step 4. Run the notebook
 
 The validated reproducible part of the notebook goes from the start of `workflow/protocol.ipynb` through the cell immediately before `# Scenic pruning step`.
 
-That section was executed successfully in the container on April 27, 2026 using a temporary copy of the notebook truncated just before the SCENIC pruning block.
+That section was executed successfully in the container on April 27, 2026 using a temporary copy of the notebook.
 
 That part includes:
 
