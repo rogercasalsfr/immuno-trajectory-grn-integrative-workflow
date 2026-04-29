@@ -28,8 +28,8 @@ if [[ ! -f "$IMAGE_PATH" ]]; then
   exit 1
 fi
 
-if [[ ! -f "$ROOT_DIR/scripts/final_protocol.ipynb" ]]; then
-  echo "ERROR: scripts/final_protocol.ipynb was not found in $ROOT_DIR"
+if [[ ! -f "$ROOT_DIR/workflow/protocol.ipynb" ]]; then
+  echo "ERROR: workflow/protocol.ipynb was not found in $ROOT_DIR"
   exit 1
 fi
 
