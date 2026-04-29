@@ -2,7 +2,7 @@
 
 This repository gives you one container recipe and one main notebook.
 
-If you follow the steps below, you can reproduce the workflow in `scripts/protocol.ipynb` from the beginning through the cell immediately before `# Scenic pruning step`.
+If you follow the steps below, you can reproduce the workflow in `workflow/protocol.ipynb` from the beginning through the cell immediately before `# Scenic pruning step`.
 
 ## What to use
 
@@ -10,7 +10,7 @@ Use these files:
 
 - `env/pstime.def`: recipe used to build the image
 - `env/environment.yml`: conda environment specification used inside the image
-- `scripts/protocol.ipynb`: main notebook
+- `workflow/protocol.ipynb`: main notebook
 - `check_container.sh`: one-command validation script
 
 The repository tracks the recipe, not the built container image. You build `pstime.sif` locally from `env/pstime.def`.
@@ -79,7 +79,7 @@ Then open the URL shown by Jupyter in your browser.
 
 Inside Jupyter, open:
 
-- `scripts/protocol.ipynb`
+- `workflow/protocol.ipynb`
 
 Important:
 
@@ -88,7 +88,7 @@ Important:
 
 ## Step 4. Run the reproducible part of the notebook
 
-The validated reproducible part of the notebook goes from the start of `scripts/protocol.ipynb` through the cell immediately before `# Scenic pruning step`.
+The validated reproducible part of the notebook goes from the start of `workflow/protocol.ipynb` through the cell immediately before `# Scenic pruning step`.
 
 That section was executed successfully in the container on April 27, 2026 using a temporary copy of the notebook truncated just before the SCENIC pruning block.
 
@@ -110,7 +110,7 @@ The first notebook cells create a local data directory and download these public
 
 They are downloaded into:
 
-- `scripts/data/GSE123813/`
+- `workflow/data/GSE123813/`
 
 So if the notebook asks for internet access during the first run, that is expected.
 
@@ -148,4 +148,4 @@ For this repository, the easy path is:
 1. build `pstime.sif`
 2. run `./check_container.sh`
 3. launch Jupyter Lab
-4. run `scripts/protocol.ipynb` up to the cell before `# Scenic pruning step`
+4. run `workflow/protocol.ipynb` up to the cell before `# Scenic pruning step`
