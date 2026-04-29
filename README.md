@@ -88,18 +88,23 @@ Important:
 
 ## Step 4. Run the notebook
 
-The validated reproducible part of the notebook goes from the start of `workflow/protocol.ipynb` through the cell immediately before `# Scenic pruning step`.
+The notebook `workflow/protocol.ipynb` is now fully reproducible from start to finish inside the container environment.
 
-That section was executed successfully in the container on April 27, 2026 using a temporary copy of the notebook.
-
-That part includes:
+The workflow includes:
 
 1. downloading the public GEO example data
-2. reading metadata and counts
+2. reading metadata and count matrices
 3. building the `AnnData` object
-4. preprocessing
-5. Harmony integration
-6. clustering and pseudotime-related setup before the GRN pruning section
+4. preprocessing and quality control
+5. patient-effect correction with Harmony
+6. clustering and UMAP visualization
+7. trajectory inference and pseudotime analysis
+8. transcription factor activity analysis
+9. integration of GRN/pySCENIC-derived outputs
+10. regulatory network interpretation and visualization
+
+The notebook is designed to be run sequentially from the first cell to the last cell. For best reproducibility, run it from the repository root using the container environment described above.
+
 
 ## Example data used by the notebook
 
