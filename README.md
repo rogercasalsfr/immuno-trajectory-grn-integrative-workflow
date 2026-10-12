@@ -1,8 +1,14 @@
-# Immuno trajectory GRN integrative workflow
+# Integrating trajectory inference and GRN analysis of T-cell state transitions
 
-This repository gives you one container recipe and one main notebook.
+Reproducible computational protocol for resolving the transcriptional programs behind T-cell state
+transitions in the tumour microenvironment. It combines pseudotime trajectory inference, regulon activity
+(pySCENIC) and transcription factor–transcription factor network reconstruction, using public
+scRNA-seq data from squamous cell carcinoma before and after anti-PD-1 therapy
+([GSE123813](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE123813)).
 
-If you follow the steps below, you can reproduce the workflow in `workflow/protocol.ipynb` from the beginning through the final, taking into account that scenic inference step should be previously ran in your computer.
+This repository gives you one container recipe and one main notebook. Following the steps below reproduces
+`workflow/protocol.ipynb` from start to finish. The pySCENIC network-inference step is computationally heavy
+and is run beforehand, outside the container; the notebook then integrates its outputs.
 
 ## What to use
 
@@ -154,3 +160,21 @@ For this repository, the easy path is:
 2. run `./check_container.sh`
 3. launch Jupyter Lab
 4. run `workflow/protocol.ipynb` up to the cell before `# Scenic pruning step`
+
+## Citation
+
+If you use this protocol, please cite:
+
+> Casals-Franch R, Nonell L, Villà-Freixa J, López García de Lomana A. Integrating trajectory inference
+> and gene regulatory network analysis to resolve transcriptional programs of T cell state transitions in
+> the tumor microenvironment. *bioRxiv* (2026). <https://doi.org/10.64898/2026.05.12.724558>
+
+The underlying analysis is described in:
+
+> Casals-Franch R, Villà-Freixa J, Nonell L, López García de Lomana A. Transcriptional reprogramming of
+> tumor-infiltrating T cells during PD-1 blockade revealed through gene regulatory network and trajectory
+> inference in squamous cell carcinoma. *bioRxiv* (2025). <https://doi.org/10.1101/2025.10.15.682506>
+
+## License
+
+[MIT](LICENSE) © Roger Casals-Franch
